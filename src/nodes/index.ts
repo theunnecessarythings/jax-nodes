@@ -23,11 +23,6 @@ export const categories = uniqueCategories.map((cat) => ({
   }),
 }));
 
-// export const categories: { name: string; items: FunctionData[] }[] = [
-//   // { name: 'jnp', items: functionsData.filter(/*…*/) },
-//   { name: "jnp", items: functionsData },
-// ];
-
 export const initialNodes = functionsData.slice(0, 2).map((func, index) => ({
   id: func.id,
   type: "function-node",

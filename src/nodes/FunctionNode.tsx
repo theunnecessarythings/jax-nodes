@@ -1,72 +1,68 @@
 import React from "react";
-import { Handle, Position, NodeProps } from "@xyflow/react";
+import { Position, NodeProps } from "@xyflow/react";
+import { BaseNode } from "@/components/base-node";
+import { LabeledHandle } from "@/components/labeled-handle";
+import {
+  NodeHeader,
+  NodeHeaderTitle,
+  NodeHeaderActions,
+  NodeHeaderMenuAction,
+  NodeHeaderDeleteAction,
+  NodeHeaderIcon,
+} from "@/components/node-header";
+import { Rocket } from "lucide-react";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export function FunctionNode({ data }: NodeProps<FunctionNode>) {
   const { label, inputs, outputs } = data;
 
-  const rowHeight = 24;
-  const headerHeight = 28;
-  const nodeHeight =
-    Math.max(inputs.length, outputs.length) * rowHeight + headerHeight;
-
   return (
-    <div
-      className="function-node"
-      style={{
-        padding: 10,
-        position: "relative",
-        boxSizing: "border-box",
-        height: nodeHeight,
-        border: "1px solid #aaa",
-        borderRadius: 5,
-        background: "#fff",
-      }}
-    >
-      {/* Header Bar */}
-      <div className="fn-header">{label}</div>
+    <BaseNode className="p-0 text-sm leading-snug">
+      <NodeHeader className="p-3 border-b-2">
+        <NodeHeaderIcon>
+          <Rocket />
+        </NodeHeaderIcon>
+        <NodeHeaderTitle>{label}</NodeHeaderTitle>
+        <NodeHeaderActions>
+          <NodeHeaderMenuAction label="Open node menu">
+            <DropdownMenuItem>Reset</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
+          </NodeHeaderMenuAction>
+          <NodeHeaderDeleteAction />
+        </NodeHeaderActions>
+      </NodeHeader>
 
-      {/* Sockets & Labels */}
-      {inputs.map((inp, i) => {
-        const y = headerHeight + i * rowHeight + rowHeight / 2;
-        return (
-          <React.Fragment key={inp.name}>
-            <Handle
+      <footer className="bg-black-100">
+        {inputs.map((inp) => {
+          return (
+            <LabeledHandle
+              className="inputhandle my-2"
+              key={inp.name}
               type="target"
+              title={inp.name}
               position={Position.Left}
               id={inp.name}
-              style={{ top: y }}
               isConnectable
             />
-            <div
-              className="fn-socket-label fn-socket-label--in"
-              style={{ top: y }}
-            >
-              {inp.name}
-            </div>
-          </React.Fragment>
-        );
-      })}
+          );
+        })}
 
-      {outputs.map((out, i) => {
-        const y = headerHeight + i * rowHeight + rowHeight / 2;
-        return (
-          <React.Fragment key={out.name}>
-            <Handle
-              type="source"
-              position={Position.Right}
-              id={out.name}
-              style={{ top: y }}
-              isConnectable
-            />
-            <div
-              className="fn-socket-label fn-socket-label--out"
-              style={{ top: y }}
-            >
-              {out.name}
-            </div>
-          </React.Fragment>
-        );
-      })}
-    </div>
+        <footer className="flex flex-col border-t-2  ml-auto items-end bg-accent/60 rounded-bl-sm rounded-br-sm">
+          {outputs.map((out) => {
+            return (
+              <LabeledHandle
+                className="outputhandle my-2"
+                key={out.name}
+                type="source"
+                position={Position.Right}
+                id={out.name}
+                title={out.name}
+                isConnectable
+              />
+            );
+          })}
+        </footer>
+      </footer>
+    </BaseNode>
   );
 }

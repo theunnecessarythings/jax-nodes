@@ -62,7 +62,7 @@ def build_api_dict(module, names, category):
             'label': nice_label(name),
             'inputs': inputs,
             'outputs': outputs,
-            'category': category,
+            'category': nice_label(category),
         })
 
     return api
